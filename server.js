@@ -15,15 +15,16 @@ app.use(express.json());
 // Create the directory to the public file for express 
 app.use(express.static('public'));
 // Home page path for displaying home page, uses fs and express
-// express to route it and file system to read it 
+// express to route it and file system to read it, returning index.html
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 })
-// Note page path using express and file system
+// Note page path using express and file system, returning notes.html
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 })
-// JSON of note data, JSON express and fs 
+// JSON of note data, JSON express and fs, accessing the db.json
+// to display the data within the JSON objects 
 app.get("/api/notes", (req, res) => {
     fs.readFile("./db/db.json", "utf-8", (err, data) => {
         return res.json(JSON.parse(data));

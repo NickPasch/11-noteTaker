@@ -8,24 +8,29 @@ var app = express();
 // Establishing the port
 var PORT = process.env.PORT || 8080;
 // Ability to decipher all required data
+// First one to parse data with qs library
 app.use(express.urlencoded({extended:true}));
+// Second to parse JSON data
 app.use(express.json());
+// Create the directory to the public file for express 
 app.use(express.static('public'));
-// Home page path
+// Home page path for displaying home page, uses fs and express
+// express to route it and file system to read it 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/index.html"));
 })
-// Note page path 
+// Note page path using express and file system
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 })
-// JSON of note data
+// JSON of note data, JSON express and fs 
 app.get("/api/notes", (req, res) => {
     fs.readFile("./db/db.json", "utf-8", (err, data) => {
         return res.json(JSON.parse(data));
     })
 })
-// Convert user input to JSON and add to data
+// Convert user input to JSON and use fs to write it to the .json file
+// db.json in the db folder so it can be read with the app.get above
 app.post("/api/notes", (req, res) =>{
     console.log(req.body);
     req.body["id"] = notes.length + 1;
